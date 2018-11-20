@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DemoHotel</string>
+    <string name="text_permission_deny_message">If you deny this permission basic features of
+        application no longer function.
+    </string>
+    <string name="text_permission_never_message">Some permissions are denied with never ask again so need
+        to be enabled from Settings->Apps->DemoHotel->Permissions
+    </string>
+    <string name="profile">Profile</string>
+</resources>
