@@ -105,6 +105,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         UserPrefrences.setMobile(this,st_contact);
                         UserPrefrences.setUserName(this,st_name);
                         UserPrefrences.setPassword(this,st_pass);
+                        UserPrefrences.setHotelId(signupModel.getData().getId(),this);
                         Intent intent=new Intent(SignupActivity.this,MainActivity.class);
                         startActivity(intent);
                         finish();

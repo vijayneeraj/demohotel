@@ -32,6 +32,9 @@ public interface RestService {
             , @Field(ParamName.ADDRESS) String address, @Field(ParamName.HOTELNAME) String name,@Field(ParamName.ROOMNO)String room,
                                      @Field(ParamName.ArrivalDateTime)String arrival,@Field(ParamName.DEPARTUREDATETIME)String departure,@Field(ParamName.DOB)String dob,
                                      @Field(ParamName.NUMBEROFPERSON)String numberPerson,@Field(ParamName.GENDER)String gender,@Field(ParamName.IDNAME)String id_name,@Field(ParamName.IDNO)String id_no,
-                                     @Field(ParamName.IDPIC)String id_pic,@Field(ParamName.GUESTPIC)String guestPic);
-
+                                     @Field(ParamName.IDPIC)String id_pic,@Field(ParamName.GUESTPIC)String guestPic,
+                                     @Field(ParamName.HOTEID)String hotelId,@Field(ParamName.PERSONDATA)String persondata);
+    @FormUrlEncoded
+    @POST(ApiUrls.GETGUEST)
+    Call<ResponseBody> getGuests(@Field(ParamName.HOTEID) String hotelId);
 }

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 /**
  * @author neeraj on 19/11/18.
  */
-public class UserPrefrences {
+public class  UserPrefrences {
     public static final String PREFNAME = "demohoel";
 
     public static void setUserName(Context context, String username) {
@@ -73,5 +73,14 @@ public class UserPrefrences {
     public static Boolean getLogin(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean("login", false);
+    }
+    public static void setHotelId(String id,Context context){
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE).edit();
+        editor.putString("id", id);
+        editor.commit();
+    }
+    public static String getHotelId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString("id", "");
     }
 }

@@ -98,6 +98,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:focusable="false"
                         android:id="@+id/arrival_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -109,6 +110,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:focusable="false"
                         android:id="@+id/Departure_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -120,6 +122,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:focusable="false"
                         android:id="@+id/dob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -184,7 +187,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:editable="false"
                         android:hint="IdNumber"
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorAccent"

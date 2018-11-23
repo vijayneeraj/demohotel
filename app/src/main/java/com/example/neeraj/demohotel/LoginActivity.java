@@ -136,6 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     UserPrefrences.setMobile(this,loginModel.getMessage().getPhonenumber());
                     UserPrefrences.setUserName(this,loginModel.getMessage().getName());
                     UserPrefrences.setPassword(this,password.getText().toString());
+                    UserPrefrences.setHotelId(loginModel.getMessage().getId(),this);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

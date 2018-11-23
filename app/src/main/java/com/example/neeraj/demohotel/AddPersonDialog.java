@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -32,7 +33,7 @@ import java.util.Date;
 public class AddPersonDialog extends Dialog implements View.OnClickListener {
     ImageView id_profile, id_image;
     TextView btn_pic, btn_id, submit, cancel;
-    EditText person_name;
+    EditText person_name,id_name,id_no;
     DialogListener dialogListener;
     private int CAMERA_REQUEST = 22;
     int CAMERA_CALL = 0;
@@ -83,6 +84,8 @@ public class AddPersonDialog extends Dialog implements View.OnClickListener {
         submit = findViewById(R.id.submit);
         cancel = findViewById(R.id.cancel);
         person_name = findViewById(R.id.person_name);
+        id_no=findViewById(R.id.id_no);
+        id_name=findViewById(R.id.id_name);
         btn_id.setOnClickListener(this);
         btn_pic.setOnClickListener(this);
         submit.setOnClickListener(this);
@@ -94,14 +97,12 @@ public class AddPersonDialog extends Dialog implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.submit:
                 if (dialogListener != null) {
-                    if (person_name.getText().toString()!=null && !person_name.getText().toString().isEmpty()){
-                        dialogListener.onSubmit(pathID, pathProfile, person_name.getText().toString());
-
-                    }else {
-                        person_name.setError("person name required!");
+                    if (validateParam()){
+                        dialogListener.onSubmit(pathID, pathProfile, person_name.getText().toString(),id_name.getText().toString(),id_no.getText().toString());
+                        dismiss();
                     }
                 }
-                dismiss();
+
                 break;
             case R.id.cancel:
                 if (dialogListener != null) {
@@ -126,8 +127,31 @@ public class AddPersonDialog extends Dialog implements View.OnClickListener {
     public interface DialogListener {
         void onCancel();
 
-        void onSubmit(String path_id, String path_profile, String personName);
+        void onSubmit(String path_id, String path_profile, String personName,String idName,String idNo);
 
         void openDialogCamera(int call);
+    }
+    private boolean validateParam(){
+
+        String pName=person_name.getText().toString();
+        String iName=id_name.getText().toString();
+        String idNO=id_no.getText().toString();
+        if (pName.isEmpty()){
+            person_name.setError("Person name required!");
+            return false;
+        }else if (iName.isEmpty()){
+            id_name.setError("Idname required!");
+            return false;
+        }else  if (idNO.isEmpty()){
+            id_no.setError("IdNumber required!");
+            return false;
+        }else if (pathProfile.isEmpty()){
+            Toast.makeText(context,"Profile pic required",Toast.LENGTH_LONG).show();
+            return false;
+        }else if (pathID.isEmpty()){
+            Toast.makeText(context,"Id pic required",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 }

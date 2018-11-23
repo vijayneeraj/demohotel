@@ -31,4 +31,5 @@ public class PersonModel {
     public void setProfile_path(String profile_path) {
         this.profile_path = profile_path;
     }
+
 }

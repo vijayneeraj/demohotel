@@ -33,6 +33,8 @@ import android.widget.Toolbar;
 import com.example.neeraj.demohotel.rest.ApiUrls;
 import com.example.neeraj.demohotel.rest.RestAdapter;
 import com.example.neeraj.demohotel.rest.RestClient;
+import com.example.neeraj.demohotel.rest.models.OtherPersonModel;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RestClient restClient;
     String guestIdpic = "";
     String guestProfilePic = "";
+    List<OtherPersonModel> personsList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int gender_id = -1;
 
     private void initViews() {
+        personsList = new ArrayList<>();
         restClient = new RestClient(this, this);
         gt_name = findViewById(R.id.gt_name);
         gt_email = findViewById(R.id.gt_email);
@@ -223,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View view) {
                 int tag = (int) ((View) view.getParent().getParent()).getTag();
                 viesAdded.remove(tag - 1);
+                personsList.remove(tag-1);
                 lin_lay.removeView((View) view.getParent().getParent());
             }
         });
@@ -270,8 +275,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void registerGuest() {
+        String members=new Gson().toJson(personsList);
         restClient.callApi(ApiUrls.GUESTAPI, RestAdapter.getAdapter().doGuestSignup(st_email, st_contact, "", st_address, st_name, st_room, arv_date, deprt_time,
-                date_birth, String.valueOf(lin_lay.getChildCount()), String.valueOf(gender_id), idName, idNumber, guestIdpic, guestProfilePic));
+                date_birth, String.valueOf(lin_lay.getChildCount()), String.valueOf(gender_id), idName, idNumber, guestIdpic, guestProfilePic, UserPrefrences.getHotelId(this),members));
     }
 
     private void showDateTime(final int check) {
@@ -287,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        date_txt = year + "-" + dayOfMonth + "-" + (monthOfYear + 1);
+                        date_txt = year + "-" +(monthOfYear + 1) + "-" +  dayOfMonth;
                         if (check == 0) {
                             tiemPicker();
                         } else {
@@ -350,7 +356,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             addPersonDialog.setProfileImg(mCurrentPhotoPath);
                         } else {
                             Picasso.with(this).load(new File(mCurrentPhotoPath)).placeholder(R.drawable.no_image).into(id_profile);
-                            Picasso.with(this).load(new File(mCurrentPhotoPath)).placeholder(R.drawable.no_image).into(id_image);
                             Bitmap bm = BitmapFactory.decodeFile(mCurrentPhotoPath);
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
@@ -371,9 +376,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onSubmit(String path_id, String path_profile, String personName) {
+    public void onSubmit(String path_id, String path_profile, String personName, String idName, String idNo) {
         //add new view to layout
         addViewToLayout(personName, path_id, path_profile);
+        OtherPersonModel otherPersonModel = new OtherPersonModel();
+        otherPersonModel.setName(personName);
+        otherPersonModel.setIdName(idName);
+        otherPersonModel.setIdno(idNo);
+        otherPersonModel.setIdpic(getImageString(path_id));
+        otherPersonModel.setPic(getImageString(path_profile));
+        personsList.add(otherPersonModel);
+
         addPersonDialog = null;
     }
 
@@ -453,6 +466,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onResponseSucess(String response, int apiId) {
+        restClient.dismissLoadingDialog();
         if (response != null) {
             JsonObject jsonObject = (JsonObject) new JsonParser().parse(response);
             if (jsonObject.get("result").getAsString().equalsIgnoreCase("1")) {
@@ -485,8 +499,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         id_no.setText("");
         id_no.setHint("IdNumber");
         lin_lay.removeAllViews();
-        guestProfilePic="";
-        guestIdpic="";
+        guestProfilePic = "";
+        guestIdpic = "";
         id_profile.setImageResource(R.drawable.no_image);
         id_image.setImageResource(R.drawable.no_image);
     }
@@ -495,5 +509,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onFailure(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
+    }
+
+    private String getImageString(String path) {
+        Bitmap bm = BitmapFactory.decodeFile(path);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        String guestIdpic = Base64.encodeToString(b, Base64.DEFAULT);
+        return guestIdpic;
     }
 }

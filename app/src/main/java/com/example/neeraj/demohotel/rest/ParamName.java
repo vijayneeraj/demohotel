@@ -19,6 +19,8 @@ public class ParamName {
     public static final String IDNO="id_no";
     public static final String IDPIC="id_pic";
     public static final String GUESTPIC="guest_pic";
+    public static final String HOTEID="hotel_id";
+    public static final String PERSONDATA="persondata";
 
 
 
